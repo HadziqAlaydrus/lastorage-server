@@ -10,6 +10,7 @@ const{
     getFromByUserId,
     deleteFormById,
     updateFormById,
+    getStorageById,
 } = require('../controllers/form');
 
 const {authenticateToken} = require('../middleware/verifyToken');
@@ -17,6 +18,7 @@ const {authenticateToken} = require('../middleware/verifyToken');
 router.get('/form', getForm);
 router.get('/form/:id', getFromByUserId)
 router.get('/users',getUser)
+router.get('/form/:id',getStorageById);
 router.post('/signup', signupUser);
 router.post('/login', loginUser);
 router.post('/form', authenticateToken ,createForm);

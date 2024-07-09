@@ -90,6 +90,16 @@ const getForm = async (req, res) => {
     }
 };
 
+const getStorageById = async (req,res) =>{
+    try {
+        const id = req.params.id
+        const result = await db.query('SELECT * FROM form WHERE id = $1', [id])
+        res.status(200).json(result.rows)
+    } catch (error) {
+        res.status(500).send("error get form by id")
+    }
+}
+
 const getFromByUserId = async (req, res) => {
     try{
         const userId = req.params.id
@@ -136,5 +146,6 @@ module.exports = {
     getForm,
     getFromByUserId,
     deleteFormById,
-    updateFormById
+    updateFormById,
+    getStorageById
 };
