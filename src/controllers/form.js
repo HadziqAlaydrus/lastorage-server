@@ -155,7 +155,7 @@ const updateFormById = async (req, res) => {
 
   const formatDate = (isoDateString) => {
     const date = new Date(isoDateString);
-    return date.toLocaleDateString('id-ID'); // Format tanggal sesuai dengan locale Indonesia
+    return date.toISOString().split('T')[0]; // Menggunakan format ISO tanpa waktu
 }
   
 
