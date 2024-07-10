@@ -56,7 +56,7 @@ const loginUser = async (req, res) => {
 
 const createForm = async (req, res) => {
     const { nama_makanan, tanggal_dibuat, tanggal_kadaluarsa, jumlah, tempat_penyimpanan } = req.body;
-    const users_id = req["user"].id;
+    const users_id = req.user.id;
 
     try {
         if (!users_id || !nama_makanan || !tanggal_dibuat || !tanggal_kadaluarsa || !jumlah || !tempat_penyimpanan) {
@@ -70,13 +70,18 @@ const createForm = async (req, res) => {
         `;
         const values = [users_id, nama_makanan, tanggal_dibuat, tanggal_kadaluarsa, jumlah, tempat_penyimpanan];
         const result = await db.query(insertQuery, values);
+        const newForm = result.rows[0];
 
-        res.status(201).json(result.rows[0]);
+        newForm.tanggal_dibuat = formatDate(newForm.tanggal_dibuat);
+        newForm.tanggal_kadaluarsa = formatDate(newForm.tanggal_kadaluarsa);
+
+        res.status(201).json(newForm);
     } catch (error) {
         console.error(error);
         res.status(500).send('Failed to create form');
     }
 };
+
 
 
 
@@ -106,14 +111,20 @@ const getStorageById = async (req,res) =>{
 }
 
 const getFromByUserId = async (req, res) => {
-    try{
-        const userId = req.params.id
-        const result = await db.query(`SELECT * FROM form WHERE users_id = $1`, [userId])
-        res.status(200).json(result.rows)
-    }catch(error){
-        res.status(500).send("error get form by user id")
+    try {
+        const userId = req.params.id;
+        const result = await db.query('SELECT * FROM form WHERE users_id = $1', [userId]);
+        const formattedResult = result.rows.map(row => ({
+            ...row,
+            tanggal_dibuat: formatDate(row.tanggal_dibuat),
+            tanggal_kadaluarsa: formatDate(row.tanggal_kadaluarsa)
+        }));
+        res.status(200).json(formattedResult);
+    } catch (error) {
+        res.status(500).send('Error get form by user id');
     }
-}
+};
+
 
 const deleteFormById = async (req,res) =>{
     try {
