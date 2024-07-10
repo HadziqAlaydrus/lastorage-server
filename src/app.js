@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const userRoutes = require("./routes/form"); // Tidak menggunakan destrukturisasi
+const userRoutes = require("./routes/form"); 
 const bodyParser = require('body-parser');
 const { application } = require("express");
 require("dotenv").config();
@@ -13,7 +13,6 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Menggunakan router untuk menangani rute terkait pengguna
 app.use('/', userRoutes);
 
 app.get('/', (req,res)=>{
@@ -21,5 +20,5 @@ app.get('/', (req,res)=>{
 })
 
 app.listen(port, () => {
-    console.log(`Server running on port ${port}`); // Menggunakan backticks untuk template string
+    console.log(`Server running on port ${port}`); 
 });

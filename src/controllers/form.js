@@ -83,7 +83,12 @@ const createForm = async (req, res) => {
 const getForm = async (req, res) => {
     try {
         const result = await db.query('SELECT * FROM form');
-        res.status(200).json(result.rows);
+        const formattedResult = result.rows.map(row => ({
+            ...row,
+            tanggal_dibuat: formatDate(row.tanggal_dibuat),
+            tanggal_kadaluarsa: formatDate(row.tanggal_kadaluarsa)
+        }));
+        res.status(200).json(formattedResult);
     } catch (error) {
         console.error(error);
         res.status(500).send('Connection Error');
@@ -136,6 +141,11 @@ const updateFormById = async (req, res) => {
       res.status(500).send("Error Updating Storage");
     }
   };
+
+  const formatDate = (isoDateString) => {
+    const date = new Date(isoDateString);
+    return date.toLocaleDateString('id-ID'); // Format tanggal sesuai dengan locale Indonesia
+}
   
 
 module.exports = {
